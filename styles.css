@@ -1,4 +1,3 @@
-
 /* ==========================
    GLOBAL
 ========================== */
@@ -22,9 +21,34 @@ html{
 
 body{
     font-family:'Inter',sans-serif;
-    background:#152950;
+    background:#000000;
     color:#ffffc4;
     overflow-x:hidden;
+}
+
+@media (prefers-reduced-motion: reduce){
+    *{
+        animation-duration:0.001ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:0.001ms !important;
+        scroll-behavior:auto !important;
+    }
+}
+
+/* ==========================
+   SCROLL REVEAL (micro-interaction)
+========================== */
+
+.reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .8s cubic-bezier(.22,1,.36,1),
+               transform .8s cubic-bezier(.22,1,.36,1);
+}
+
+.reveal.in-view{
+    opacity:1;
+    transform:translateY(0);
 }
 
 /* ==========================
@@ -47,10 +71,24 @@ body{
     backdrop-filter:blur(15px);
 
     background:rgba(0,0,0,.45);
+
+    transition:padding .4s ease, background .4s ease, box-shadow .4s ease;
+}
+
+.navbar.scrolled{
+    padding:.6rem 5%;
+    background:rgba(0,0,0,.75);
+    box-shadow:0 1px 0 rgba(255,255,196,.08);
 }
 
 .logo img{
     width:120px;
+    transition:transform .4s ease, filter .4s ease;
+}
+
+.logo img:hover{
+    transform:scale(1.05) rotate(-1deg);
+    filter:drop-shadow(0 0 12px rgba(220,20,60,.6));
 }
 
 .navbar ul{
@@ -62,16 +100,35 @@ body{
 .navbar a{
     text-decoration:none;
     color:#ffffc4;
+    position: relative;
 
     letter-spacing:3px;
     font-size:1.7rem;
     font-family:'Kadisoka Hand';
-    transition:.3s;
+    transition:color .3s ease;
+}
+
+/* underline-on-hover micro-interaction, replaces flat opacity fade */
+.nav-link::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-4px;
+
+    width:0%;
+    height:2px;
+
+    background:rgb(2, 3, 52);
+
+    transition:width .3s ease;
 }
 
 .navbar a:hover{
-    opacity:.5;
-    color: crimson;
+    transition: .2s;
+    opacity: .55;}
+
+.nav-link:hover::after{
+    width:100%;
 }
 
 /* ==========================
@@ -99,6 +156,13 @@ body{
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
+
+    animation:heroZoom 18s ease-in-out infinite alternate;
+}
+
+@keyframes heroZoom{
+    0%{ background-size:100%; }
+    100%{ background-size:112%; }
 }
 
 .hero-content{
@@ -112,6 +176,13 @@ body{
 .hero-logo{
     width:400px;
     max-width:90%;
+
+    animation:logoFadeIn 1.2s ease both;
+}
+
+@keyframes logoFadeIn{
+    from{ opacity:0; transform:translateY(-16px); }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 .hero-content h2{
@@ -134,6 +205,22 @@ body{
 
     letter-spacing:6px;
 
+}
+
+/* subtle flicker on the title, dead-season vibe, very restrained */
+.hero-title{
+    animation-name: flicker;
+    animation-duration: 6s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes flicker{
+    0%, 92%, 100%{ opacity:1; }
+    93%{ opacity:.85; }
+    94%{ opacity:1; }
+    95%{ opacity:.9; }
+    96%{ opacity:1; }
 }
 
 .hero-content p{
@@ -162,38 +249,64 @@ body{
 .btn-primary,
 .btn-secondary{
 
+    --x:50%;
+    --y:50%;
+
+    position:relative;
+    overflow:hidden;
+
     text-decoration:none;
 
     padding:1.25rem 3rem;
 
     letter-spacing:3px;
 
-    transition:.3s;
-}
-
-.btn-primary{
-
     background:#ffffc4;
     color:#152950;
+
+    transition:transform .3s ease, color .3s ease;
 }
 
-.btn-secondary{
-
-    background:#ffffc4;
-    color:#152950;
+.btn-primary span,
+.btn-secondary span{
+    position:relative;
+    z-index:2;
 }
 
-.btn-primary:hover{
-    background: rgba(136, 4, 4, 0.808);
-    color:#ffffc4;
-     transform:translateY(-4px);
+/* radial glow that follows the cursor, sits under text */
+.btn-primary::before,
+.btn-secondary::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    z-index:1;
+
+    background:radial-gradient(
+        120px circle at var(--x) var(--y),
+        #ddc846,
+        transparent 70%
+    );
+
+    opacity:0;
+    transition:opacity .35s ease;
 }
 
+.btn-primary:hover,
 .btn-secondary:hover{
-    background: rgba(136, 4, 4, 0.808);
-    color:#ffffc4;
-     transform:translateY(-4px);
+    color:#010537;
+    transform:translateY(-4px);
 }
+
+.btn-primary:hover::before,
+.btn-secondary:hover::before{
+    opacity:1;
+}
+
+.btn-primary:active,
+.btn-secondary:active{
+    transform:translateY(-1px) scale(.98);
+}
+
 
 /* ==========================
    SCROLL
@@ -205,12 +318,22 @@ body{
     bottom:40px;
     left:50%;
 
+    color:#ffffc4;
+    text-decoration:none;
+
     transform:translateX(-50%);
 
     letter-spacing:5px;
     font-size:.7rem;
 
     animation:bounce 2s infinite;
+
+    transition:opacity .3s ease, letter-spacing .3s ease;
+}
+
+.scroll-indicator:hover{
+    opacity:.6;
+    letter-spacing:7px;
 }
 
 @keyframes bounce{
@@ -261,7 +384,7 @@ body{
 
 .merch-card{
 
-    transition:.4s;
+    transition:transform .4s ease;
 
     cursor:pointer;
 }
@@ -273,10 +396,22 @@ body{
     rotate(-2deg);
 }
 
+.merch-img-wrap{
+    overflow:hidden;
+    position:relative;
+}
+
 .merch-card img{
 
     width:100%;
     display:block;
+
+    transition:transform .6s ease, filter .6s ease;
+}
+
+.merch-card:hover img{
+    transform:scale(1.08);
+    filter:drop-shadow(0 14px 18px rgba(0,0,0,.25));
 }
 
 .merch-card h3{
@@ -286,6 +421,27 @@ body{
     font-size:2rem;
 
     letter-spacing:5px;
+
+    position:relative;
+    display:inline-block;
+}
+
+.merch-card h3::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-4px;
+
+    width:0%;
+    height:2px;
+
+    background:crimson;
+
+    transition:width .35s ease;
+}
+
+.merch-card:hover h3::after{
+    width:100%;
 }
 
 .merch-card p{
@@ -348,7 +504,7 @@ body{
 
     line-height:2.5;
 
-    list-style-position: inside;
+    list-style:none;
 
     padding-left:0;
 
@@ -356,21 +512,38 @@ body{
 }
 
 .tracklist li{
+    display:flex;
+    align-items:baseline;
+    gap:1rem;
 
+    transition:.3s ease;
+    cursor:pointer;
     font-size:1.2rem;
-    
-
     border-bottom:
     1px solid rgba(255,255,196,.1);
-
 }
- /* ==========================
-  ^^^^^^^^^ font-size:1.4rem;
-    font-family:'Kadisoka Hand', cursive;
 
-    font-weight:normal
-    
-========================== */
+.track-num{
+    font-size:.8rem;
+    opacity:.4;
+    transition:opacity .3s ease, color .3s ease;
+    font-variant-numeric: tabular-nums;
+}
+
+.tracklist:hover li{
+    opacity:.65;
+}
+
+.tracklist li:hover{
+    opacity:1;
+    color:white;
+    transform:translateX(10px);
+}
+
+.tracklist li:hover .track-num{
+    opacity:1;
+    color:crimson;
+}
 
 .music-right{
 
@@ -395,11 +568,16 @@ blockquote{
     line-height:1.2;
 
     max-width:500px;
-    font-display: center;
 
     margin-bottom:3rem;
 
     transform:rotate(-1deg);
+
+    transition:text-shadow .4s ease;
+}
+
+blockquote:hover{
+    text-shadow:0 0 22px rgba(220,20,60,.55);
 }
 
 .player-placeholder{
@@ -410,6 +588,14 @@ blockquote{
     padding:3rem;
 
     width:500px;
+
+    transition:border-color .4s ease, transform .4s ease, background .4s ease;
+}
+
+.player-placeholder:hover{
+    border-color:rgba(220,20,60,.6);
+    transform:translateY(-6px);
+    background:rgba(255,255,196,.03);
 }
 
 .player-placeholder h3{
@@ -446,6 +632,13 @@ footer img{
     width:120px;
 
     margin-bottom:2rem;
+
+    transition:filter .4s ease, transform .4s ease;
+}
+
+footer img:hover{
+    filter:drop-shadow(0 0 10px rgba(220,20,60,.5));
+    transform:scale(1.04);
 }
 
 footer p{
@@ -494,4 +687,3 @@ footer p{
         flex-direction:column;
     }
 }
-
