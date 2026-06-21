@@ -380,9 +380,9 @@ body{
 
     justify-content:center;
 
-    align-items:flex-end;
+    align-items:center;
 
-    
+    text-align:center;
 }
 
 blockquote{
@@ -390,14 +390,16 @@ blockquote{
      font-family:'Kadisoka Hand', cursive;
 
     font-weight: 500;
-    font-size:5rem;
+    font-size:4.5rem;
 
     line-height:1.2;
 
     max-width:500px;
     font-display: center;
 
-    margin-bottom:4rem;
+    margin-bottom:3rem;
+
+    transform:rotate(-1deg);
 }
 
 .player-placeholder{
