@@ -146,60 +146,67 @@
 
     </section>
 
-
-
     <!-- MUSIC SECTION -->
+<section id="music">
+  <div class="music-left reveal">
+    <h2>MUSIC</h2>
+    <h1>NOTHING</h1>
+    <p>Dead Season's debut full-length LP.</p>
+    <ol class="tracklist">
+      <li>
+        <span class="track-num">01</span>
+        <span class="track-name">Nothing</span>
+        <span class="track-duration">0:15</span>
+      </li>
+      <li>
+        <span class="track-num">02</span>
+        <span class="track-name">Them (Looking Up)</span>
+        <span class="track-duration">0:15</span>
+      </li>
+      <li>
+        <span class="track-num">03</span>
+        <span class="track-name">The Other Side Of Time</span>
+        <span class="track-duration">0:15</span>
+      </li>
+      <li>
+        <span class="track-num">04</span>
+        <span class="track-name">Posturing</span>
+        <span class="track-duration">0:15</span>
+      </li>
+      <li>
+        <span class="track-num">05</span>
+        <span class="track-name">Bringing The Rain</span>
+        <span class="track-duration">0:15</span>
+      </li>
+      <li>
+        <span class="track-num">06</span>
+        <span class="track-name">Disconnect</span>
+        <span class="track-duration">0:15</span>
+      </li>
+      <li>
+        <span class="track-num">07</span>
+        <span class="track-name">My Publication</span>
+        <span class="track-duration">0:15</span>
+      </li>
+      <li>
+        <span class="track-num">08</span>
+        <span class="track-name">Quoting Jane</span>
+        <span class="track-duration">0:15</span>
+      </li>
+    </ol>
+  </div>
 
-    <section id="music">
-
-        <div class="music-left reveal">
-
-            <h2>MUSIC</h2>
-
-            <h1>NOTHING</h1>
-
-            <p>
-                Dead Season's debut full-length LP.
-            </p>
-
-            <ol class="tracklist">
-
-                <li><span class="track-num">01</span><span class="track-name">Nothing</span></li>
-                <li><span class="track-num">02</span><span class="track-name">Them (Looking Up)</span></li>
-                <li><span class="track-num">03</span><span class="track-name">The Other Side Of Time</span></li>
-                <li><span class="track-num">04</span><span class="track-name">Posturing</span></li>
-                <li><span class="track-num">05</span><span class="track-name">Bringing The Rain</span></li>
-                <li><span class="track-num">06</span><span class="track-name">Disconnect</span></li>
-                <li><span class="track-num">07</span><span class="track-name">My Publication</span></li>
-                <li><span class="track-num">08</span><span class="track-name">Quoting Jane</span></li>
-
-            </ol>
-
-        </div>
-
-        <div class="music-right reveal">
-
-            <blockquote>
-
-                “WHEN SHE LOST EVERYTHING...
-                NOTHING BECAME SOMETHING.”
-
-            </blockquote>
-
-            <div class="player-placeholder">
-
-                <h3>STREAM NOW</h3>
-
-                <p>
-                    Spotify • Apple Music • Pandora
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
+  <div class="music-right reveal">
+    <blockquote>
+      "WHEN SHE LOST EVERYTHING...
+      NOTHING BECAME SOMETHING."
+    </blockquote>
+    <div class="player-placeholder">
+      <h3>STREAM NOW</h3>
+      <p>Spotify • Apple Music • Pandora</p>
+    </div>
+  </div>
+</section>
 
 
     <!-- FOOTER -->
@@ -253,7 +260,64 @@
                 btn.style.setProperty('--y', `${e.clientY - rect.top}px`);
             });
         });
+        
     </script>
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+<div class="cursor-trail t1"></div>
+<div class="cursor-trail t2"></div>
+<div class="cursor-trail t3"></div>
+
+<script>
+    const dot = document.querySelector('.cursor-dot');
+    const ring = document.querySelector('.cursor-ring');
+    const trails = document.querySelectorAll('.cursor-trail');
+
+    let mouseX = 0, mouseY = 0;
+    let trailPositions = [{x:0,y:0},{x:0,y:0},{x:0,y:0}];
+
+    window.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        dot.style.left = mouseX + 'px';
+        dot.style.top = mouseY + 'px';
+        ring.style.left = mouseX + 'px';
+        ring.style.top = mouseY + 'px';
+
+        setTimeout(() => {
+            trailPositions[0] = {x: mouseX, y: mouseY};
+            trails[0].style.left = trailPositions[0].x + 'px';
+            trails[0].style.top = trailPositions[0].y + 'px';
+        }, 80);
+
+        setTimeout(() => {
+            trailPositions[1] = {x: mouseX, y: mouseY};
+            trails[1].style.left = trailPositions[1].x + 'px';
+            trails[1].style.top = trailPositions[1].y + 'px';
+        }, 160);
+
+        setTimeout(() => {
+            trailPositions[2] = {x: mouseX, y: mouseY};
+            trails[2].style.left = trailPositions[2].x + 'px';
+            trails[2].style.top = trailPositions[2].y + 'px';
+        }, 240);
+    });
+
+    document.querySelectorAll('a, button, .merch-card, .tracklist li, .player-placeholder').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            ring.classList.add('ring-hover');
+            dot.classList.add('dot-hover');
+        });
+        el.addEventListener('mouseleave', () => {
+            ring.classList.remove('ring-hover');
+            dot.classList.remove('dot-hover');
+        });
+    });
+
+    window.addEventListener('mousedown', () => ring.classList.add('ring-click'));
+    window.addEventListener('mouseup', () => ring.classList.remove('ring-click'));
+</script>
 
 </body>
 </html>
