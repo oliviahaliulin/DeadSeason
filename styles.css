@@ -366,10 +366,9 @@ body{
 }
 
 .merch-card{
-
     transition:transform .4s ease;
-
     cursor:pointer;
+    text-align:center;
 }
 
 .merch-card:hover{
